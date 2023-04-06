@@ -10,6 +10,8 @@ function Nav() {
   const [address, setAddress] = useState('');
   const [message, setMessage] = useState('test message');
   const [signature, setSignature] = useState('');
+  const [walletConnectBtn, setwalletConnectBtn] = useState("Connect Wallet");
+  const [xp, setxp] = useState(0)
 
   const handleClick = () => {
     setClicked(!clicked);
@@ -55,6 +57,7 @@ function Nav() {
         body: JSON.stringify({ message, signature ,address}),
       });
       const responseData = await response.json();
+      setxp(responseData.points);
       console.log(responseData);
     } catch (error) {
       console.error(error);
@@ -78,7 +81,12 @@ function Nav() {
         <li>
           <NavLink className="navbarBtn">
             {/* wallet connect used here */}
-            <Button onClick={handleWalletConnect}>Connect Wallet</Button>
+            {xp > 0 ? (
+        <span>{xp}Xp</span>
+      ) : (
+        <span></span>
+      )}
+            <Button onClick={handleWalletConnect}>{walletConnectBtn}</Button>
             {/* wallet connect function from here */}
           </NavLink>
         </li>
