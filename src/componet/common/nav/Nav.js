@@ -8,7 +8,7 @@ function Nav() {
   const [clicked, setClicked] = useState(false);
   const [web3, setWeb3] = useState(null);
   const [address, setAddress] = useState('');
-  const [message, setMessage] = useState('test message');
+  const [message, setMessage] = useState('signing to quest');
   const [signature, setSignature] = useState('');
   const [walletConnectBtn, setwalletConnectBtn] = useState("Connect Wallet");
   const [xp, setxp] = useState(0)
@@ -25,6 +25,7 @@ function Nav() {
         const accounts = await web3.eth.getAccounts();
         setWeb3(web3);
         setAddress(accounts[0]);
+        setwalletConnectBtn(accounts[0].slice(0,5)+'...'+accounts[0].slice(-5))
         await handleSignMessage();
       } catch (error) {
         console.error(error);
@@ -46,6 +47,10 @@ function Nav() {
     }
   };
 
+  const DISCORD_AUTH_URL = "https://discord.com/api/oauth2/authorize?client_id=1093225051781869668&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fdiscord%2Fcallback&response_type=code&scope=identify%20guilds%20email%20guilds.members.read"
+  const discordValidator = async()=> {
+      window.location = DISCORD_AUTH_URL; 
+  }
   const sendSignedMessage = async (signature) => {
     const apiUrl = 'http://localhost:3009/user/metamaskAuth';
     try {
@@ -87,6 +92,7 @@ function Nav() {
         <span></span>
       )}
             <Button onClick={handleWalletConnect}>{walletConnectBtn}</Button>
+            <Button onClick={discordValidator}>discord</Button>
             {/* wallet connect function from here */}
           </NavLink>
         </li>
