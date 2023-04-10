@@ -25,7 +25,6 @@ function Nav() {
         const accounts = await web3.eth.getAccounts();
         setWeb3(web3);
         setAddress(accounts[0]);
-        setwalletConnectBtn(accounts[0].slice(0,5)+'...'+accounts[0].slice(-5))
         await handleSignMessage();
       } catch (error) {
         console.error(error);
@@ -52,7 +51,8 @@ function Nav() {
       window.location = DISCORD_AUTH_URL; 
   }
   const sendSignedMessage = async (signature) => {
-    const apiUrl = 'http://localhost:3009/user/metamaskAuth';
+    setwalletConnectBtn(address.slice(0,5)+'...'+address.slice(-5))
+    const apiUrl = 'http://31.220.48.246:4000/user/metamaskAuth';
     try {
       const response = await fetch(apiUrl, {
         method: 'POST',
@@ -62,10 +62,15 @@ function Nav() {
         body: JSON.stringify({ message, signature ,address}),
       });
       const responseData = await response.json();
+      console.log(response);
       setxp(responseData.points);
+      localStorage.setItem('jwtToken',responseData.token);
+      localStorage.setItem('address',address);
       console.log(responseData);
+      const t = localStorage.getItem('jwtToken');
+      console.log(t);
     } catch (error) {
-      console.error(error);
+      console.error(error,"error from auth");
     }
   };
 

@@ -31,8 +31,27 @@ export default function TaskCard({ task }) {
   const [down, setDown] = useState(false);
   const Task = task.split("~");
   const icon = Task[0].toLowerCase();
-  const url = Task[1];
   console.log(Task);
+  const addPoint = async() =>  {
+   let point = parseInt(task.split("~")[2]);
+   const ad = localStorage.getItem('address');
+   const apiUrl = 'http://localhost:4000/user/addPoint';
+   try {
+     const token = localStorage.getItem('jwtToken');
+     const response = await fetch(apiUrl, {
+       method: 'POST',
+       headers: {
+         'Content-Type': 'application/json',
+         'Authorization': `Bearer ${token}`
+       },
+       body: JSON.stringify({point:point,address:ad}),
+     });
+     console.log(response)
+   } catch (error) {
+     
+   }
+   
+  }
 
   return (
     <Card
@@ -101,7 +120,7 @@ export default function TaskCard({ task }) {
               {task.split("~")[2]}
             </span>
           </Flex> */}
-          <Link to={url}>
+         
             <Button
               variant={"outline"}
               display={expanded ? "block" : "none"}
@@ -110,10 +129,11 @@ export default function TaskCard({ task }) {
               borderRadius={"50px"}
               fontWeight={"5000"}
               color={"#0EA5E9"}
+              onClick={addPoint}
             >
               Verify
             </Button>
-          </Link>
+          
         </VStack>
       </CardBody>
     </Card>
