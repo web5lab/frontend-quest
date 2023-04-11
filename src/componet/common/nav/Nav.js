@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import "./nav.css";
 import { Button } from "@chakra-ui/react";
 import Web3 from 'web3';
+import TwitterButton from "./twitterBtn";
 
 function Nav() {
   const [clicked, setClicked] = useState(false);
@@ -98,6 +99,7 @@ function Nav() {
       )}
             <Button onClick={handleWalletConnect}>{walletConnectBtn}</Button>
             <Button onClick={discordValidator}>discord</Button>
+            <TwitterButton></TwitterButton>
             {/* wallet connect function from here */}
           </NavLink>
         </li>
