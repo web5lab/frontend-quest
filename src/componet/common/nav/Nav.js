@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import "./nav.css";
 import { Button } from "@chakra-ui/react";
 import Web3 from 'web3';
-import TwitterButton from "./twitterBtn";
+
 
 function Nav() {
   const [clicked, setClicked] = useState(false);
@@ -18,6 +18,16 @@ function Nav() {
     setClicked(!clicked);
   };
 
+  const twitteAuth = async () => {
+    const key = await fetch('http://31.220.48.246:4000/user/twitter').then(response => response.json())
+    .then(data => {return data.token})
+    try {
+      const redirect_uri = encodeURIComponent('http://localhost:3000/callback');
+      window.location.href = `https://api.twitter.com/oauth/authorize?oauth_token=${key}&oauth_callback=${redirect_uri}`;
+    } catch (err) {
+      console.error('Error:', err);
+    }
+  };
   const handleWalletConnect = async () => {
     if (window.ethereum) {
       try {
@@ -99,7 +109,7 @@ function Nav() {
       )}
             <Button onClick={handleWalletConnect}>{walletConnectBtn}</Button>
             <Button onClick={discordValidator}>discord</Button>
-            <TwitterButton></TwitterButton>
+            <button onClick={twitteAuth}>Sign in with Twitter</button>
             {/* wallet connect function from here */}
           </NavLink>
         </li>

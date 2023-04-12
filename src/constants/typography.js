@@ -27,29 +27,29 @@ export const FILL_15PARENT = "15%"
 export const FILL_5PARENT = "5%"
 
 //Positions
-export const FIXED="fixed"
-export const RELATIVE="relative"
-export const ABSOLUTE="absolute"
-export const STICKY="sticky"
+export const FIXED="fixed";
+export const RELATIVE="relative";
+export const ABSOLUTE="absolute";
+export const STICKY="sticky";
 
 //Font Weight
-export const BOLD = "bold"
-export const ITALIC = "italic"
-export const NORMAL = "normal"
+export const BOLD = "bold";
+export const ITALIC = "italic";
+export const NORMAL = "normal";
 
 //GridTempletColumns
-export const R1="repeat(1,1fr)"
-export const R2="repeat(2,1fr)"
-export const R3="repeat(3,1fr)"
-export const R4="repeat(4,1fr)"
-export const R5="repeat(5,1fr)"
-export const R6="repeat(6,1fr)"
-export const R7="repeat(7,1fr)"
-export const R8="repeat(8,1fr)"
-export const R9="repeat(9,1fr)"
-export const R10="repeat(10,1fr)"
-export const R11="repeat(11,1fr)"
-export const R12="repeat(12,1fr)"
+export const R1="repeat(1,1fr)";
+export const R2="repeat(2,1fr)";
+export const R3="repeat(3,1fr)";
+export const R4="repeat(4,1fr)";
+export const R5="repeat(5,1fr)";
+export const R6="repeat(6,1fr)";
+export const R7="repeat(7,1fr)";
+export const R8="repeat(8,1fr)";
+export const R9="repeat(9,1fr)";
+export const R10="repeat(10,1fr)";
+export const R11="repeat(11,1fr)";
+export const R12="repeat(12,1fr)";
 
 //Margins
 export const AUTO = "auto"
