@@ -5,9 +5,9 @@ import { Button } from "@chakra-ui/react";
 import Web3 from 'web3';
 import { useDispatch, useSelector } from "react-redux";
 import { wallet } from "../../../redux/user/user.actions";
-
+ 
 function Nav() {
-
+ 
   const {  
     walletAddress,
   pointXp,
@@ -27,7 +27,7 @@ function Nav() {
 
   let dispatch = useDispatch();
 
-  console.log(walletAddress,"mainu pata bhi nahi ");
+  console.log(walletAddress,"mainu ");
   const handleClick = () => {
     setClicked(!clicked);
   };
@@ -35,12 +35,15 @@ function Nav() {
   const twitteAuth = async () => {
     console.log("working ");
     const key = await fetch('http://31.220.48.246:4000/user/twitter').then(response => response.json())
-    .then(data => {return data.token})
+    .then(data => {
+      console.log("token",data)
+      return data.token})
     try {
       const redirect_uri = encodeURIComponent('http://localhost:3000/callback');
-      window.location.href = `https://api.twitter.com/oauth/authorize?oauth_token=${key}&oauth_callback=${redirect_uri}`;
+      console.log(redirect_uri); 
+        window.location.href = `https://api.twitter.com/oauth/authorize?oauth_token=${key}&oauth_callback=${redirect_uri}`;
     } catch (err) {
-      console.error('Error:', err);
+      console.error('Error here', err);
     }
   };
   const handleWalletConnect = async () => {
@@ -73,7 +76,7 @@ function Nav() {
     }
   };
 
-  const DISCORD_AUTH_URL = "https://discord.com/api/oauth2/authorize?client_id=1093225051781869668&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fdiscord%2Fcallback&response_type=code&scope=identify%20guilds%20email%20guilds.members.read"
+  const DISCORD_AUTH_URL = "https://discord.com/oauth2/authorize?client_id=1093225051781869668&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2FQuest%2F641b16bd5546483a6a14da7b&response_type=code&scope=identify%20guilds%20guilds.join%20guilds.members.read"
   const discordValidator = async()=> {
       window.location = DISCORD_AUTH_URL; 
   }

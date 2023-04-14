@@ -25,7 +25,12 @@ function Quest() {
   let { id } = params;
   let [loading, setLoading] = useState(false);
 
+  var y=localStorage.getItem("points");
+  const [xp, setxp] = useState(y);
+  console.log("quest",xp)
   useEffect(() => {
+    var y=localStorage.getItem("points");
+    setxp(y);
     const getData = async () => {
       setLoading(true);
       let res = await axios({
@@ -33,6 +38,7 @@ function Quest() {
         url: GET_ONE_QUEST(id),
       });
       setData([res.data.data]);
+      console.log("hehehe",res.data.data);
       setLoading(false);
     };
 
@@ -66,9 +72,14 @@ function Quest() {
                         proof and a chance to win from $100 raffle"
         />
 
+{xp > 0 ? (
+        <span style={{display:"flex",width:FILL_PARENT,justifyContent:"right",}}>{xp}Xp</span>
+      ) : (
+        <span></span>
+      )}
         <VStack className="down" w={FILL_PARENT} alignItems="flex-start">
           {data[0].task.split("|").map((el) => (
-            <TaskCard task={el.trim()} />
+            <TaskCard task={el.trim()}   xppoints={data[0].tokens} />
           ))}
         </VStack>
       </Flex>

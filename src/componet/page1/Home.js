@@ -9,6 +9,15 @@ import { Link } from "react-router-dom";
 import Navbar from "../page3/NavbarQ";
 import signupq from "../images/signupq.png"
 function Home() {
+
+  
+  if(localStorage.getItem("points")==null){
+  localStorage.setItem("points","0");
+}
+else{
+  localStorage.setItem("points",localStorage.getItem("points"));
+
+}
   return (
     <div>
       {/* <Header />
