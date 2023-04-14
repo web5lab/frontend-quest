@@ -3,22 +3,37 @@ import { NavLink } from "react-router-dom";
 import "./nav.css";
 import { Button } from "@chakra-ui/react";
 import Web3 from 'web3';
-
+import { useDispatch, useSelector } from "react-redux";
+import { wallet } from "../../../redux/user/user.actions";
 
 function Nav() {
+
+  const {  
+    walletAddress,
+  pointXp,
+  secretToken,
+  userData} = useSelector(
+    (state) => state.userManager
+  );
+
   const [clicked, setClicked] = useState(false);
   const [web3, setWeb3] = useState(null);
   const [address, setAddress] = useState('');
   const [message, setMessage] = useState('signing to quest');
   const [signature, setSignature] = useState('');
-  const [walletConnectBtn, setwalletConnectBtn] = useState("Connect Wallet");
+  const [walletConnectBtn, setwalletConnectBtn] = useState(walletAddress.length<17?walletAddress: walletAddress.slice(0,5)+'...'+walletAddress.slice(-5));
   const [xp, setxp] = useState(0)
 
+
+  let dispatch = useDispatch();
+
+  console.log(walletAddress,"mainu pata bhi nahi ");
   const handleClick = () => {
     setClicked(!clicked);
   };
 
   const twitteAuth = async () => {
+    console.log("working ");
     const key = await fetch('http://31.220.48.246:4000/user/twitter').then(response => response.json())
     .then(data => {return data.token})
     try {
@@ -36,14 +51,14 @@ function Nav() {
         const accounts = await web3.eth.getAccounts();
         setWeb3(web3);
         setAddress(accounts[0]);
-        await handleSignMessage();
+        await handleSignMessage(accounts[0]);
       } catch (error) {
         console.error(error);
       }
     }
   };
 
-  const handleSignMessage = async () => {
+  const handleSignMessage = async (item) => {
     const messageToSign = message.trim();
     if (web3 && address && messageToSign) {
       try {
@@ -51,6 +66,7 @@ function Nav() {
         setSignature(signature);
         sendSignedMessage(signature);
         console.log(signature);
+        dispatch(wallet(item));
       } catch (error) {
         console.error(error);
       }
