@@ -24,6 +24,21 @@ function Nav() {
     try {
       const redirect_uri = encodeURIComponent('http://localhost:3000/callback');
       window.location.href = `https://api.twitter.com/oauth/authorize?oauth_token=${key}&oauth_callback=${redirect_uri}`;
+      const searchParams = new URLSearchParams(window.location.search);
+      const oauthToken = searchParams.get('oauth_token');
+      const oauthVerifier = searchParams.get('oauth_verifier');
+      if (oauthToken && oauthVerifier) {
+        const payload = { oauthToken, oauthVerifier };
+        const response = await fetch('/user/twitter/callback', {
+          method: 'POST',
+          body: JSON.stringify(payload),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        const data = await response.json();
+        console.log(data);
+      }
     } catch (err) {
       console.error('Error:', err);
     }
