@@ -7,8 +7,10 @@ import {
   HStack,
   Text,
   VStack,
+  Stack,
+  Checkbox
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiTwitter } from "react-icons/fi";
 import { IoIosArrowDown } from "react-icons/io";
 import { AiOutlineYoutube } from "react-icons/ai";
@@ -25,17 +27,74 @@ import {
 } from "../../../constants/typography";
 import "./task.css";
 import { Link } from "react-router-dom";
-
-export default function TaskCard({ task }) {
+import { inherits } from "@babel/types";
+ 
+ export default function TaskCard({ task,xppoints }) {
   const [expanded, setExpanded] = useState(false);
+var y=localStorage.getItem("points");
+  const [xp, setxp] = useState(y);
+
   const [down, setDown] = useState(false);
+  const [showdiscord, setshowdiscord] = useState(true);
+  const [showtwitter, setshowtwitter] = useState(false);
+
   const Task = task.split("~");
   const icon = Task[0].toLowerCase();
-  console.log(Task);
+  console.log("task",Task);
+  useEffect(()=>{
+     y=localStorage.getItem("points");
+
+    setxp(y);
+console.log("taskcard value points local",xp,y)
+  },[])
   const addPoint = async() =>  {
+    const twitteAuth = async () => { 
+      const key = await fetch('http://31.220.48.246:4000/user/twitter').then(response => response.json())
+      .then(data => {
+        console.log("token",data)
+        return data.token})
+      try {
+        const redirect_uri = (`http://localhost:3001/callback`);
+        console.log(redirect_uri); 
+        window.location.href = `https://api.twitter.com/oauth/authorize?oauth_token=${key}&oauth_callback=http%3A%2F%2Flocalhost%3A3001%2FQuest%2F641b16bd5546483a6a14da7b&response_type=code&scope=identify%20guilds%20guilds.join%20guilds.members.read`;
+        var x=localStorage.getItem("points");
+        setxp(x);
+        let point = parseInt(task.split("~")[2]);
+        const num=Number(xp)+Number(point);
+        console.log("first cal func",num);
+        setxp((num));
+        localStorage.setItem("points",String(num));
+      } catch (err) {
+        console.error('Error here', err);
+      }
+    };
+    const DISCORD_AUTH_URL = "https://discord.com/oauth2/authorize?client_id=1093225051781869668&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2FQuest%2F641b16bd5546483a6a14da7b&response_type=code&scope=identify%20guilds%20guilds.join%20guilds.members.read"
+    const discordValidator = async()=> {
+        window.location = DISCORD_AUTH_URL; 
+        var x=localStorage.getItem("points");
+        setxp(x);
+        let point = parseInt(task.split("~")[2]);
+        const num=Number(xp)+Number(point);
+        console.log("first cal func",num);
+        setxp((num));
+        localStorage.setItem("points",String(num));
+        setshowdiscord(false);
+    }
+
+    let name = (task.split("~")[0]);
+    console.log("nok",name);
+    if(name.toLowerCase().includes("twitter")){
+      await twitteAuth();
+    }
+    else if(name.toLowerCase().includes("discord"))
+    {
+      await discordValidator();
+    }
    let point = parseInt(task.split("~")[2]);
    const ad = localStorage.getItem('address');
-   const apiUrl = 'http://localhost:4000/user/addPoint';
+    
+   console.log(ad,"jaaman",point)
+   const apiUrl = 'http://31.220.48.246:4000/user/addPoint';
    try {
      const token = localStorage.getItem('jwtToken');
      const response = await fetch(apiUrl, {
@@ -54,6 +113,8 @@ export default function TaskCard({ task }) {
   }
 
   return (
+<>
+
     <Card
       bg={"#1A1D1F"}
       w={FILL_PARENT}
@@ -62,6 +123,7 @@ export default function TaskCard({ task }) {
       padding={0}
       marginTop="10px"
     >
+        
       <CardBody w={FILL_PARENT}>
         <VStack w={FILL_PARENT}>
           <Flex justifyContent={SB} w={FILL_PARENT}>
@@ -98,7 +160,8 @@ export default function TaskCard({ task }) {
               >
                 {task.split("~")[2]} xp
               </Badge>
-              <IoIosArrowDown
+              
+         {    showdiscord ?<IoIosArrowDown
                 size={16}
                 color="#0EA5E9"
                 style={{
@@ -111,6 +174,14 @@ export default function TaskCard({ task }) {
                   setDown((prev) => !prev);
                 }}
               />
+              :
+              <Stack spacing={5} direction='row'>
+  <Checkbox defaultChecked isDisabled></Checkbox> 
+</Stack>
+            
+            }
+
+
             </HStack>
           </Flex>
           {/* <Flex w={FILL_PARENT} alignItems={"flex-start"}>
@@ -137,5 +208,6 @@ export default function TaskCard({ task }) {
         </VStack>
       </CardBody>
     </Card>
+</>
   );
 }

@@ -29,7 +29,7 @@ function Nav() {
       const oauthVerifier = searchParams.get('oauth_verifier');
       if (oauthToken && oauthVerifier) {
         const payload = { oauthToken, oauthVerifier };
-        const response = await fetch('/user/twitter/callback', {
+        const response = await fetch('', {
           method: 'POST',
           body: JSON.stringify(payload),
           headers: {

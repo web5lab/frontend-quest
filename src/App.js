@@ -23,7 +23,8 @@ class App extends Component {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
-            <Route path="/MyQuest" element={<MyQuest />} />
+            <Route path="/MyQuest" element={<MyQuest />} /> 
+            <Route exact path='/callback' element={<MyQuest />} /> 
             <Route path="/Quest/:id" element={<Quest />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
