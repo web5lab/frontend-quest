@@ -2,8 +2,11 @@ import React, { useState } from 'react'
 import "./QuestDataR.css"
 import { AiOutlineAliyun } from "react-icons/ai";
 import { BsPeople } from "react-icons/bs";
-import { Box, Button, Flex, HStack } from '@chakra-ui/react';
-import { AUTO, FILL_30PARENT, FILL_40PARENT, FILL_PARENT } from '../../constants/typography';
+import { Box, Button, Flex, HStack,Image} from '@chakra-ui/react';
+import { AUTO, FILL_30PARENT, FILL_40PARENT, FILL_PARENT,TRANSPARENT,SB } from '../../constants/typography';
+import {IoMdStopwatch,IoIosStar} from "react-icons/io"
+import {TbClick} from "react-icons/tb"
+import low from "../images/cardlow.png";
 
 
 function QuestDataR(props) {
@@ -24,7 +27,15 @@ const [pbtn,setPbtn] = useState(false)
 
                 }}>Project info</Button>
             </div>
+
+            
+
             <Box className='condiv'  width={{base:FILL_PARENT,sm:FILL_PARENT,lg:FILL_PARENT}}>
+            <Flex w={FILL_PARENT} justifyContent={SB} alignItems={"center"}>
+                    <Button color={"#34D399"} _hover={{bg:TRANSPARENT}} _active={{bg:TRANSPARENT}} bg={TRANSPARENT} fontSize={"11px"} leftIcon={<IoMdStopwatch color="#34D399" />}>7 days left</Button>
+                    <Button color={"#34D399"} _hover={{bg:TRANSPARENT}} _active={{bg:TRANSPARENT}} bg={TRANSPARENT} fontSize={"11px"} leftIcon={<IoIosStar color="#34D399" />}>Eligible</Button>
+
+                </Flex>
 
                 <Flex alignItems={"flex-start"} ><h3>{props.pname}</h3></Flex>
                 <HStack alignItems={"center"} className='kdiv'>
@@ -35,7 +46,7 @@ const [pbtn,setPbtn] = useState(false)
                 <div className='paradiv'>
                     <p>
                         {props.para1}
-
+                        
                     </p>
                     <p>
                         {props.para2}
@@ -47,17 +58,27 @@ const [pbtn,setPbtn] = useState(false)
                     <h6>USDC</h6>
                 </div>
                 <div className='taskdiv'>
-                    <p><AiOutlineAliyun />  Perpetual + Raffle</p>
-                    <p>{props.task} tasks</p>
+                    <p style={{display:"flex"
+                        ,flexDirection:"row",justifyContent:"space-evenly",
+                        alignItems:"center",
+                        gap:"0.5rem"
+                         
+                        }}><AiOutlineAliyun/>Perpetual + Raffle</p>
+                    <p style={{display:"flex"
+                        ,flexDirection:"row",justifyContent:"space-evenly",
+                        width:"4rem",
+                        alignItems:"center"
+                        }}>{<TbClick />}{props.task} tasks</p>
                 </div>
                 <div className='lastflex1'>
-                    <h4>  <BsPeople /></h4>
-                    <h5>{props.likes} Like</h5>
+                <Image width={"150px"}  padding={"1rem"} src={low}></Image>
+
                 </div>
 
                 <div className='xpdiv'>
-                    <h3>{props.xppoints} </h3>
-                    <h4>100 USDC</h4>
+                    <h3>{props.xppoints} XP <p>To Everyone </p> </h3>
+                    <h4>100 USDC <p>To 10 Lucky Winners </p></h4>
+                    
 
                 </div>
                 <div className='imgsmallingdvi'>

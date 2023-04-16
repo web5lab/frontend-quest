@@ -49,7 +49,7 @@ function MyQuest() {
         </Link>
       </div>
       <div className="diveff">
-        <h1>Live Quests</h1>
+        <h1 style={{marginLeft:"3rem"}}>Live Quests</h1>
         <Grid
           justifyContent={"center"}
           alignItems={"center"}

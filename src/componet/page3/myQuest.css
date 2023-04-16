@@ -21,10 +21,14 @@
 }
 
 .diveff {
+ 
+  text-align: start;
   width: 90%;
   color: white;
   margin: auto;
   margin-top: 40px;
+  font-size: 23px;
+  font-weight: 700;
 }
 
 .carddiv {

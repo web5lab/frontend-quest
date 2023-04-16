@@ -72,12 +72,21 @@ function Quest() {
                         proof and a chance to win from $100 raffle"
         />
 
+        <VStack className="down" w={FILL_PARENT} alignItems="flex-start">
 {xp > 0 ? (
-        <span style={{display:"flex",width:FILL_PARENT,justifyContent:"right",}}>{xp}Xp</span>
+        <span style={{display:"flex",width:FILL_PARENT,justifyContent:"right"}}>{xp}Xp</span>
       ) : (
         <span></span>
       )}
-        <VStack className="down" w={FILL_PARENT} alignItems="flex-start">
+        
+        <Flex  w={FILL_PARENT} style={{
+            display:"flex",
+            justifyContent:"space-between"
+          }}>
+            <p>Your tasks</p>
+            <p>0/3</p>
+
+          </Flex>
           {data[0].task.split("|").map((el) => (
             <TaskCard task={el.trim()}   xppoints={data[0].tokens} />
           ))}

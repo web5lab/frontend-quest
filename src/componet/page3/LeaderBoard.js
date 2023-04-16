@@ -1,4 +1,4 @@
-import background from "./4.png.png";
+import background from "./replace6.png";
 import svg from "./svg.png";
 import profile from "./avatar.png";
 import "./Leader.css";
