@@ -4,46 +4,58 @@ import profile from "./avatar.png";
 import "./Leader.css";
 import Navbar from "./NavbarQ";
 import Header from "../common/Header";
+import { useState } from "react";
+
 
 const dummyArr = [
   {
-    serialNum: 1,
+    index: 1,
     name: "perry",
     points: 200,
   },
   {
-    serialNum: 2,
+    index: 2,
     name: "sharry",
     points: 100,
   },
   {
-    serialNum: 3,
+    index: 3,
     name: "harry",
     points: 300,
   },
   {
-    serialNum: 4,
+    index: 4,
     name: "cherry",
     points: 400,
   },
   {
-    serialNum: 5,
+    index: 5,
     name: "ashok",
     points: 50,
   },
   {
-    serialNum: 6,
+    index: 6,
     name: "chetan",
     points: 1000,
   },
   {
-    serialNum: 7,
+    index: 7,
     name: "jimmy",
     points: 1200,
   },
 ];
 
 const LeaderBoard = () => {
+  const [dataleaderboard, setdataleaderboard] = useState(dummyArr)
+  const getLeaderBoard = async() => {
+    const laeaderBoardData =  await fetch('http://31.220.48.246:4000/user/leaderboard').then(response => response.json())
+    .then(data => {
+     
+      return data})
+      setdataleaderboard(laeaderBoardData);
+  }
+  getLeaderBoard();
+
   return (
     <div className="containerWrapper">
       <Header />
@@ -103,15 +115,15 @@ const LeaderBoard = () => {
             <p>Member</p>
             <p>XP</p>
           </div>
-          {dummyArr.map((items) => (
+          {dataleaderboard.map((items) => (
             <div className="header">
               <div className="innnerDiv">
-                <span className="num">{items.serialNum}</span>
+                <span className="num">{items.index}</span>
                 <img className="user" src={profile} alt="" />
-                <p>{items.name}</p>
+                <p>{items.name.slice(0,5)}....{items.name.slice(-5)}</p>
               </div>
               <div>
-                <p>{items.points}</p>
+                <p>{items.points} Xp</p>
               </div>
             </div>
           ))}

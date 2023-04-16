@@ -13,9 +13,10 @@ import {
 import { useEffect, useState } from "react";
 import { FiTwitter } from "react-icons/fi";
 import { IoIosArrowDown } from "react-icons/io";
-import { AiOutlineYoutube } from "react-icons/ai";
+import { AiOutlineCheckCircle, AiOutlineYoutube } from "react-icons/ai";
 import { RxDiscordLogo } from "react-icons/rx";
 import { BiLink } from "react-icons/bi";
+
 import {
   AUTO,
   FILL_60PARENT,
@@ -28,13 +29,21 @@ import {
 import "./task.css";
 import { Link } from "react-router-dom";
 import { inherits } from "@babel/types";
+import { BsFillCheckCircleFill } from "react-icons/bs";
+import { useDispatch, useSelector } from "react-redux";
  
  export default function TaskCard({ task,xppoints }) {
+  const {  
+    connectionStatus} = useSelector(
+    (state) => state.userManager
+  );
+ 
   const [expanded, setExpanded] = useState(false);
 var y=localStorage.getItem("points");
   const [xp, setxp] = useState(y);
 
   const [down, setDown] = useState(false);
+  const [taskStatus, settaskStatus] = useState(false);
   const [showdiscord, setshowdiscord] = useState(true);
   const [showtwitter, setshowtwitter] = useState(false);
 
@@ -48,13 +57,18 @@ var y=localStorage.getItem("points");
 console.log("taskcard value points local",xp,y)
   },[])
   const addPoint = async() =>  {
+    if (!connectionStatus) {
+      return alert("wallet is not connected")
+    }
+    settaskStatus(true);
+    localStorage.setItem("taskStatus",true)
     const twitteAuth = async () => { 
       const key = await fetch('http://31.220.48.246:4000/user/twitter').then(response => response.json())
       .then(data => {
         console.log("token",data)
         return data.token})
       try {
-        const redirect_uri = (`http://localhost:3001/callback`);
+        const redirect_uri = (`http://localhost:3000/callback`);
         console.log(redirect_uri); 
         window.location.href = `https://api.twitter.com/oauth/authorize?oauth_token=${key}&oauth_callback=http%3A%2F%2Flocalhost%3A3001%2FQuest%2F641b16bd5546483a6a14da7b&response_type=code&scope=identify%20guilds%20guilds.join%20guilds.members.read`;
         var x=localStorage.getItem("points");
@@ -68,8 +82,8 @@ console.log("taskcard value points local",xp,y)
         console.error('Error here', err);
       }
     };
-    const DISCORD_AUTH_URL = "https://discord.com/oauth2/authorize?client_id=1093225051781869668&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2FQuest%2F641b16bd5546483a6a14da7b&response_type=code&scope=identify%20guilds%20guilds.join%20guilds.members.read"
-    const discordValidator = async()=> {
+    const DISCORD_AUTH_URL = "https://discord.com/api/oauth2/authorize?client_id=1093225051781869668&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2FQuest%2F641b16bd5546483a6a14da7b&response_type=code&scope=identify%20guilds%20guilds.join%20connections%20guilds.members.read"
+     const discordValidator = async()=> {
         window.location = DISCORD_AUTH_URL; 
         var x=localStorage.getItem("points");
         setxp(x);
@@ -139,7 +153,7 @@ console.log("taskcard value points local",xp,y)
               ) : (
                 <BiLink color="#10B981" />
               )}
-
+               
               <Text margin={0} color={"#E6E6E6"}>
                 {" "}
                 <Link to={task.split("~")[1]} target="_blank">
@@ -147,9 +161,11 @@ console.log("taskcard value points local",xp,y)
                   {task.split("~")[0]}
                 </Link>
               </Text>
+              
             </HStack>
 
             <HStack>
+           {taskStatus ? (<BsFillCheckCircleFill color="green" id="check_box"/>):<icon></icon> }
               <Badge
                 m={0}
                 textTransform="lowercase"
@@ -191,8 +207,7 @@ console.log("taskcard value points local",xp,y)
               {task.split("~")[2]}
             </span>
           </Flex> */}
-         
-            <Button
+         {connectionStatus?(<Button
               variant={"outline"}
               display={expanded ? "block" : "none"}
               borderColor={"#0EA5E9"}
@@ -203,7 +218,19 @@ console.log("taskcard value points local",xp,y)
               onClick={addPoint}
             >
               Verify
-            </Button>
+            </Button>):(<Button
+              variant={"outline"}
+              display={expanded ? "block" : "none"}
+              borderColor={"#0EA5E9"}
+              padding={"0px 32px"}
+              borderRadius={"50px"}
+              fontWeight={"5000"}
+              color={"#0EA5E9"}
+              onClick={addPoint}
+            >
+             connect wallet
+            </Button>)}
+            
           
         </VStack>
       </CardBody>

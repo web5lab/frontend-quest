@@ -108,27 +108,27 @@ function Nav() {
     <div className="startdivNav">
       <ul id="list" className={clicked ? "#list active" : "#list"}>
         <li>
-          <NavLink to="/login" className="navbar">
+          {/* <NavLink to="/login" className="navbar">
             Set Up Quest
-          </NavLink>
+          </NavLink> */}
         </li>
         <li>
-          <NavLink to="/MyQuest" className="navbar">
+          {/* <NavLink to="/MyQuest" className="navbar">
             Explore Quest
-          </NavLink>
+          </NavLink> */}
         </li>
 
         <li>
           <NavLink className="navbarBtn">
             {/* wallet connect used here */}
             {xp > 0 ? (
-        <span>{xp}Xp</span>
+        <span id="xp">{xp}Xp</span>
       ) : (
         <span></span>
       )}
-            <Button onClick={handleWalletConnect}>{walletConnectBtn}</Button>
-            <Button onClick={discordValidator}>discord</Button>
-            <button onClick={twitteAuth}>Sign in with Twitter</button>
+            <Button id="connect_wallet" onClick={handleWalletConnect}>{walletConnectBtn}</Button>
+            {/* <Button onClick={discordValidator}>discord</Button>
+            <button onClick={twitteAuth}>Sign in with Twitter</button> */}
             {/* wallet connect function from here */}
           </NavLink>
         </li>

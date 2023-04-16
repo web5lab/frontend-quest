@@ -73,18 +73,18 @@ function Quest() {
         />
 
         <VStack className="down" w={FILL_PARENT} alignItems="flex-start">
-{xp > 0 ? (
+{/* {xp > 0 ? (
         <span style={{display:"flex",width:FILL_PARENT,justifyContent:"right"}}>{xp}Xp</span>
       ) : (
         <span></span>
-      )}
+      )} */}
         
         <Flex  w={FILL_PARENT} style={{
             display:"flex",
             justifyContent:"space-between"
           }}>
             <p>Your tasks</p>
-            <p>0/3</p>
+            
 
           </Flex>
           {data[0].task.split("|").map((el) => (
