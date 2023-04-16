@@ -22,14 +22,15 @@ function Nav() {
     const key = await fetch('http://31.220.48.246:4000/user/twitter').then(response => response.json())
     .then(data => {return data.token})
     try {
-      const redirect_uri = encodeURIComponent('http://localhost:3000/callback');
-      window.location.href = `https://api.twitter.com/oauth/authorize?oauth_token=${key}&oauth_callback=${redirect_uri}`;
+      const redirect_uri = encodeURIComponent('http://localhost:4000/user/addTwitterAuth');
+      window.location.href =  `https://api.twitter.com/oauth/authorize?oauth_token=${key}&oauth_callback=${redirect_uri}`;
       const searchParams = new URLSearchParams(window.location.search);
+     console.log("search param",searchParams);
       const oauthToken = searchParams.get('oauth_token');
       const oauthVerifier = searchParams.get('oauth_verifier');
       if (oauthToken && oauthVerifier) {
-        const payload = { oauthToken, oauthVerifier };
-        const response = await fetch('', {
+        const payload = { oauthToken, oauthVerifier,key };
+        const response = await fetch('http://localhost:4000/user/addTwitterAuth', {
           method: 'POST',
           body: JSON.stringify(payload),
           headers: {
