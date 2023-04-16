@@ -9,7 +9,7 @@
 
 .topdiv {
   margin-left: 60px;
-  width: 90%;
+  width: 92%;
   height: 370px;
   border-radius: 12px;
   background-image: url(../images/4.png.png.png);
@@ -22,13 +22,17 @@
 
 .diveff {
  
-  text-align: start;
-  width: 90%;
+  width: 85%;
   color: white;
   margin: auto;
   margin-top: 40px;
   font-size: 23px;
   font-weight: 700;
+}
+.diveff  h1{
+ 
+  
+  text-align: start;
 }
 
 .carddiv {
@@ -64,8 +68,5 @@
     /* height: 270px; */
   }
 
-  .diveff h1 {
-    text-align: center;
-    /* width: 100%; */
-  }
+   
 }
