@@ -3,47 +3,45 @@ import { NavLink } from "react-router-dom";
 import "./nav.css";
 import { Button } from "@chakra-ui/react";
 import Web3 from 'web3';
-import { useDispatch, useSelector } from "react-redux";
-import { wallet } from "../../../redux/user/user.actions";
- 
-function Nav() {
- 
-  const {  
-    walletAddress,
-  pointXp,
-  secretToken,
-  userData} = useSelector(
-    (state) => state.userManager
-  );
 
+
+function Nav() {
   const [clicked, setClicked] = useState(false);
   const [web3, setWeb3] = useState(null);
   const [address, setAddress] = useState('');
   const [message, setMessage] = useState('signing to quest');
   const [signature, setSignature] = useState('');
-  const [walletConnectBtn, setwalletConnectBtn] = useState(walletAddress.length<17?walletAddress: walletAddress.slice(0,5)+'...'+walletAddress.slice(-5));
+  const [walletConnectBtn, setwalletConnectBtn] = useState("Connect Wallet");
   const [xp, setxp] = useState(0)
 
-
-  let dispatch = useDispatch();
-
-  console.log(walletAddress,"mainu ");
   const handleClick = () => {
     setClicked(!clicked);
   };
 
   const twitteAuth = async () => {
-    console.log("working ");
     const key = await fetch('http://31.220.48.246:4000/user/twitter').then(response => response.json())
-    .then(data => {
-      console.log("token",data)
-      return data.token})
+    .then(data => {return data.token})
     try {
-      const redirect_uri = encodeURIComponent('http://localhost:3000/callback');
-      console.log(redirect_uri); 
-        window.location.href = `https://api.twitter.com/oauth/authorize?oauth_token=${key}&oauth_callback=${redirect_uri}`;
+      const redirect_uri = encodeURIComponent('http://localhost:4000/user/addTwitterAuth');
+      window.location.href =  `https://api.twitter.com/oauth/authorize?oauth_token=${key}&oauth_callback=${redirect_uri}`;
+      const searchParams = new URLSearchParams(window.location.search);
+     console.log("search param",searchParams);
+      const oauthToken = searchParams.get('oauth_token');
+      const oauthVerifier = searchParams.get('oauth_verifier');
+      if (oauthToken && oauthVerifier) {
+        const payload = { oauthToken, oauthVerifier,key };
+        const response = await fetch('http://localhost:4000/user/addTwitterAuth', {
+          method: 'POST',
+          body: JSON.stringify(payload),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        const data = await response.json();
+        console.log(data);
+      }
     } catch (err) {
-      console.error('Error here', err);
+      console.error('Error:', err);
     }
   };
   const handleWalletConnect = async () => {
@@ -54,14 +52,14 @@ function Nav() {
         const accounts = await web3.eth.getAccounts();
         setWeb3(web3);
         setAddress(accounts[0]);
-        await handleSignMessage(accounts[0]);
+        await handleSignMessage();
       } catch (error) {
         console.error(error);
       }
     }
   };
 
-  const handleSignMessage = async (item) => {
+  const handleSignMessage = async () => {
     const messageToSign = message.trim();
     if (web3 && address && messageToSign) {
       try {
@@ -69,14 +67,13 @@ function Nav() {
         setSignature(signature);
         sendSignedMessage(signature);
         console.log(signature);
-        dispatch(wallet(item));
       } catch (error) {
         console.error(error);
       }
     }
   };
 
-  const DISCORD_AUTH_URL = "https://discord.com/oauth2/authorize?client_id=1093225051781869668&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2FQuest%2F641b16bd5546483a6a14da7b&response_type=code&scope=identify%20guilds%20guilds.join%20guilds.members.read"
+  const DISCORD_AUTH_URL = "https://discord.com/api/oauth2/authorize?client_id=1093225051781869668&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2FQuest%2F641b16bd5546483a6a14da7b&response_type=code&scope=identify%20guilds%20guilds.join%20guilds.members.read"
   const discordValidator = async()=> {
       window.location = DISCORD_AUTH_URL; 
   }
