@@ -1,4 +1,4 @@
-import { SET_WALLET } from "./user.type"
+import { SET_WALLET ,SET_Xp } from "./user.type"
 
 const initialState = {
     walletAddress:"Connet to wallet",
@@ -16,6 +16,13 @@ export const userReducer = (state=initialState,{type,payload})=>{
         case SET_WALLET:{
             console.log("payloadmy",payload,type);
             return {...state,walletAddress:payload,connectionStatus:true}
+             
+        }
+
+
+        case SET_Xp:{
+            console.log("payloadmy",payload,type);
+            return {...state,pointXp:payload}
              
         }
         

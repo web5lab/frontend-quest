@@ -19,6 +19,7 @@ import {
 } from "../../constants/typography";
 import { Link, useSearchParams } from "react-router-dom";
 import Header from "../common/Header";
+import { IntilizeData } from "../../services/connectWallet";
 
 function MyQuest() {
   let {
@@ -39,6 +40,9 @@ function MyQuest() {
     setQuestData(qdata);
   }, [qdata]);
 
+  useEffect(()=>{
+    IntilizeData()
+  },[IntilizeData()])
   return (
     <div style={{}}>
       <Header />

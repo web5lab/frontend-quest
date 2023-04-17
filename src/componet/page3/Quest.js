@@ -21,13 +21,13 @@ import Header from "../common/Header";
 
 function Quest() {
   const [data, setData] = useState([]);
+  const [TaskData, setTaskData] = useState()
   let params = useParams();
   let { id } = params;
   let [loading, setLoading] = useState(false);
 
   var y=localStorage.getItem("points");
   const [xp, setxp] = useState(y);
-  console.log("quest",xp)
   useEffect(() => {
     var y=localStorage.getItem("points");
     setxp(y);
@@ -35,17 +35,21 @@ function Quest() {
       setLoading(true);
       let res = await axios({
         method: "get",
+        headers: {
+          'Authorization': `Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIweDBlMTcwRTdFZmUxNDU4ZmU5MDQ5QUNlQzhCNDQzM2I3OWEwQTdEQkIiLCJpZCI6IjY0M2QwZTdmMGI4OTdjYmY2ZmU3YjAxYyIsImlhdCI6MTY4MTc0ODc1N30.10eAX9DN4JHC2sT_XPyLhwizNkPfF3n8I3YUULKyOrM"}`
+        },
         url: GET_ONE_QUEST(id),
       });
+
       setData([res.data.data]);
-      console.log("hehehe",res.data.data);
+      setTaskData(res.data.task);
       setLoading(false);
     };
 
     getData();
   }, []);
 
-  console.log(data);
+
   return data.length > 0 ? (
     <VStack padding={{ base: "16px" }} marginTop="100px" w={FILL_PARENT}>
       <Header />
@@ -87,8 +91,8 @@ function Quest() {
             
 
           </Flex>
-          {data[0].task.split("|").map((el) => (
-            <TaskCard task={el.trim()}   xppoints={data[0].tokens} />
+          {TaskData.split("|").map((el) => (
+            <TaskCard task={el.trim()}   xppoints={TaskData} questId={data[0]._id} />
           ))}
         </VStack>
       </Flex>

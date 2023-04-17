@@ -31,13 +31,35 @@ import { Link } from "react-router-dom";
 import { inherits } from "@babel/types";
 import { BsFillCheckCircleFill } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
+import { IntilizeData } from "../../../services/connectWallet";
+import axios from "axios";
  
- export default function TaskCard({ task,xppoints }) {
+ export default function TaskCard({ task,xppoints ,questId}) {
+  console.log(xppoints);
+  console.log("quest id is",questId)
+  console.log("data from parent module",task)
+  const [taskLogger, settaskLogger] = useState()
   const {  
     connectionStatus} = useSelector(
     (state) => state.userManager
   );
- 
+
+  
+ const verifyTask = async()=>{
+  const obj = {
+    questId:questId,
+      task:task
+  }
+  const response = await fetch("http://localhost:4000/quest/completeTask", {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem("jwtToken")}`
+    },
+    body: JSON.stringify(obj),
+  });
+  console.log("response",response)
+ }
   const [expanded, setExpanded] = useState(false);
 var y=localStorage.getItem("points");
   const [xp, setxp] = useState(y);
@@ -156,7 +178,7 @@ console.log("taskcard value points local",xp,y)
                
               <Text margin={0} color={"#E6E6E6"}>
                 {" "}
-                <Link to={task.split("~")[1]} target="_blank">
+                <Link to={task.split("~")[1]}  target="_blank">
                   {" "}
                   {task.split("~")[0]}
                 </Link>
@@ -165,7 +187,7 @@ console.log("taskcard value points local",xp,y)
             </HStack>
 
             <HStack>
-           {taskStatus ? (<BsFillCheckCircleFill color="green" id="check_box"/>):<icon></icon> }
+           {taskStatus || Task[3]==="completed"? (<BsFillCheckCircleFill color="green" id="check_box"/>):<icon></icon> }
               <Badge
                 m={0}
                 textTransform="lowercase"
@@ -177,7 +199,7 @@ console.log("taskcard value points local",xp,y)
                 {task.split("~")[2]} xp
               </Badge>
               
-         {    showdiscord ?<IoIosArrowDown
+         {    Task[3]!=="completed" ?<IoIosArrowDown
                 size={16}
                 color="#0EA5E9"
                 style={{
@@ -191,9 +213,7 @@ console.log("taskcard value points local",xp,y)
                 }}
               />
               :
-              <Stack spacing={5} direction='row'>
-  <Checkbox defaultChecked isDisabled></Checkbox> 
-</Stack>
+             <span></span>
             
             }
 
@@ -215,7 +235,7 @@ console.log("taskcard value points local",xp,y)
               borderRadius={"50px"}
               fontWeight={"5000"}
               color={"#0EA5E9"}
-              onClick={addPoint}
+              onClick={verifyTask}
             >
               Verify
             </Button>):(<Button

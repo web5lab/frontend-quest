@@ -12,7 +12,8 @@ function Nav() {
     walletAddress,
   pointXp,
   secretToken,
-  userData} = useSelector(
+  connectionStatus,
+  userData,} = useSelector(
     (state) => state.userManager
   );
 
@@ -47,6 +48,9 @@ function Nav() {
     }
   };
   const handleWalletConnect = async () => {
+    if (connectionStatus) {
+      return console.log("user already connected");
+    }
     if (window.ethereum) {
       try {
         await window.ethereum.enable();
@@ -82,7 +86,7 @@ function Nav() {
   }
   const sendSignedMessage = async (signature) => {
     setwalletConnectBtn(address.slice(0,5)+'...'+address.slice(-5))
-    const apiUrl = 'http://31.220.48.246:4000/user/metamaskAuth';
+    const apiUrl = 'http://localhost:4000/user/metamaskAuth';
     try {
       const response = await fetch(apiUrl, {
         method: 'POST',
@@ -95,10 +99,11 @@ function Nav() {
       console.log(response);
       setxp(responseData.points);
       localStorage.setItem('jwtToken',responseData.token);
+      localStorage.setItem('Xp',responseData.points);
       localStorage.setItem('address',address);
       console.log(responseData);
       const t = localStorage.getItem('jwtToken');
-      console.log(t);
+      console.log(responseData.token);
     } catch (error) {
       console.error(error,"error from auth");
     }
@@ -121,8 +126,8 @@ function Nav() {
         <li>
           <NavLink className="navbarBtn">
             {/* wallet connect used here */}
-            {xp > 0 ? (
-        <span id="xp">{xp}Xp</span>
+            {pointXp > 0 ? (
+        <span id="xp">{pointXp}Xp</span>
       ) : (
         <span></span>
       )}
