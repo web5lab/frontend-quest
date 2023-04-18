@@ -36,7 +36,7 @@ function Quest() {
       let res = await axios({
         method: "get",
         headers: {
-          'Authorization': `Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIweDBlMTcwRTdFZmUxNDU4ZmU5MDQ5QUNlQzhCNDQzM2I3OWEwQTdEQkIiLCJpZCI6IjY0M2QwZTdmMGI4OTdjYmY2ZmU3YjAxYyIsImlhdCI6MTY4MTc0ODc1N30.10eAX9DN4JHC2sT_XPyLhwizNkPfF3n8I3YUULKyOrM"}`
+          'Authorization': `Bearer ${localStorage.getItem("jwtToken")}`
         },
         url: GET_ONE_QUEST(id),
       });

@@ -5,6 +5,7 @@ import { Button } from "@chakra-ui/react";
 import Web3 from 'web3';
 import { useDispatch, useSelector } from "react-redux";
 import { wallet } from "../../../redux/user/user.actions";
+import twitteAuth from "../../../services/twitterAuth";
  
 function Nav() {
  
@@ -33,24 +34,11 @@ function Nav() {
     setClicked(!clicked);
   };
 
-  const twitteAuth = async () => {
-    console.log("working ");
-    const key = await fetch('http://31.220.48.246:4000/user/twitter').then(response => response.json())
-    .then(data => {
-      console.log("token",data)
-      return data.token})
-    try {
-      const redirect_uri = encodeURIComponent('http://localhost:3000/callback');
-      console.log(redirect_uri); 
-        window.location.href = `https://api.twitter.com/oauth/authorize?oauth_token=${key}&oauth_callback=${redirect_uri}`;
-    } catch (err) {
-      console.error('Error here', err);
-    }
-  };
+ 
   const handleWalletConnect = async () => {
-    if (connectionStatus) {
-      return console.log("user already connected");
-    }
+    // if (connectionStatus) {
+    //   return console.log("user already connected");
+    // }
     if (window.ethereum) {
       try {
         await window.ethereum.enable();
@@ -96,8 +84,12 @@ function Nav() {
         body: JSON.stringify({ message, signature ,address}),
       });
       const responseData = await response.json();
+      localStorage.clear('jwtToken');
+      localStorage.clear('Xp');
+      localStorage.clear('address');
       console.log(response);
       setxp(responseData.points);
+      console.log("jwt output",responseData.token);
       localStorage.setItem('jwtToken',responseData.token);
       localStorage.setItem('Xp',responseData.points);
       localStorage.setItem('address',address);
@@ -132,8 +124,8 @@ function Nav() {
         <span></span>
       )}
             <Button id="connect_wallet" onClick={handleWalletConnect}>{walletConnectBtn}</Button>
-            {/* <Button onClick={discordValidator}>discord</Button>
-            <button onClick={twitteAuth}>Sign in with Twitter</button> */}
+            <Button onClick={discordValidator}>discord</Button>
+            <button onClick={twitteAuth}>Sign in with Twitter</button>
             {/* wallet connect function from here */}
           </NavLink>
         </li>
