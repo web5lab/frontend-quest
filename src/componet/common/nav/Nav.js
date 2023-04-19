@@ -124,8 +124,6 @@ function Nav() {
         <span></span>
       )}
             <Button id="connect_wallet" onClick={handleWalletConnect}>{walletConnectBtn}</Button>
-            <Button onClick={discordValidator}>discord</Button>
-            <button onClick={twitteAuth}>Sign in with Twitter</button>
             {/* wallet connect function from here */}
           </NavLink>
         </li>

@@ -63,7 +63,7 @@ export default function LoginPage() {
         borderRadius= {"20px"}
         boxShadow= {"0px 6px 60px rgba(40, 97, 209, 0.4)"}
       >
-        <Heading size={MEDIUM}>Welcom Back!</Heading>
+        <Heading size={MEDIUM}>Welcome Back!</Heading>
         <Input
           bg={"#212121"}
           _placeholder={{ color: "#8F8F8F" }}

@@ -35,6 +35,7 @@ import { IntilizeData } from "../../../services/connectWallet";
 import axios from "axios";
 import twitteAuth from "../../../services/twitterAuth";
 import verifyTask from "../../../services/questService";
+import DiscordAuth from "../../../services/discordAuth";
 
 export default function TaskCard({ task, xppoints, questId }) {
   console.log(xppoints);
@@ -50,8 +51,7 @@ export default function TaskCard({ task, xppoints, questId }) {
 
   const [down, setDown] = useState(false);
   const [taskStatus, settaskStatus] = useState(false);
-  const [showdiscord, setshowdiscord] = useState(true);
-  const [showtwitter, setshowtwitter] = useState(false);
+  
 
   const Task = task.split("~");
   const icon = Task[0].toLowerCase();
@@ -62,72 +62,10 @@ export default function TaskCard({ task, xppoints, questId }) {
     setxp(y);
     console.log("taskcard value points local", xp, y);
   }, []);
-  const addPoint = async () => {
+  const connectWalletAlert = async () => {
     if (!connectionStatus) {
       return alert("wallet is not connected");
     }
-    settaskStatus(true);
-    localStorage.setItem("taskStatus", true);
-    const twitteAuth = async () => {
-      const key = await fetch("http://31.220.48.246:4000/user/twitter")
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("token", data);
-          return data.token;
-        });
-      try {
-        const redirect_uri = `http://localhost:3000/callback`;
-        console.log(redirect_uri);
-        window.location.href = `https://api.twitter.com/oauth/authorize?oauth_token=${key}&oauth_callback=http%3A%2F%2Flocalhost%3A3001%2FQuest%2F641b16bd5546483a6a14da7b&response_type=code&scope=identify%20guilds%20guilds.join%20guilds.members.read`;
-        var x = localStorage.getItem("points");
-        setxp(x);
-        let point = parseInt(task.split("~")[2]);
-        const num = Number(xp) + Number(point);
-        console.log("first cal func", num);
-        setxp(num);
-        localStorage.setItem("points", String(num));
-      } catch (err) {
-        console.error("Error here", err);
-      }
-    };
-    const DISCORD_AUTH_URL =
-      "https://discord.com/api/oauth2/authorize?client_id=1093225051781869668&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2FQuest%2F641b16bd5546483a6a14da7b&response_type=code&scope=identify%20guilds%20guilds.join%20connections%20guilds.members.read";
-    const discordValidator = async () => {
-      window.location = DISCORD_AUTH_URL;
-      var x = localStorage.getItem("points");
-      setxp(x);
-      let point = parseInt(task.split("~")[2]);
-      const num = Number(xp) + Number(point);
-      console.log("first cal func", num);
-      setxp(num);
-      localStorage.setItem("points", String(num));
-      setshowdiscord(false);
-    };
-
-    let name = task.split("~")[0];
-    console.log("nok", name);
-    if (name.toLowerCase().includes("twitter")) {
-      await twitteAuth();
-    } else if (name.toLowerCase().includes("discord")) {
-      await discordValidator();
-    }
-    let point = parseInt(task.split("~")[2]);
-    const ad = localStorage.getItem("address");
-
-    console.log(ad, "jaaman", point);
-    const apiUrl = "http://31.220.48.246:4000/user/addPoint";
-    try {
-      const token = localStorage.getItem("jwtToken");
-      const response = await fetch(apiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ point: point, address: ad }),
-      });
-      console.log(response);
-    } catch (error) {}
   };
 
   return (
@@ -217,7 +155,7 @@ export default function TaskCard({ task, xppoints, questId }) {
                 borderRadius={"50px"}
                 fontWeight={"5000"}
                 color={"#0EA5E9"}
-                onClick={icon.includes("twitter") ? ()=>{twitteAuth(questId,task) }:()=>{verifyTask(questId,task)}}
+                onClick={icon.includes("twitter") ? ()=>{twitteAuth(questId,task) }:icon.includes("discord") ?()=>DiscordAuth(questId,task):()=>{verifyTask(questId,task)}}
               >
                 Verify
               </Button>
@@ -230,7 +168,7 @@ export default function TaskCard({ task, xppoints, questId }) {
                 borderRadius={"50px"}
                 fontWeight={"5000"}
                 color={"#0EA5E9"}
-                onClick={addPoint}
+                onClick={connectWalletAlert}
               >
                 connect wallet
               </Button>
