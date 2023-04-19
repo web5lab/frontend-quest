@@ -15,8 +15,10 @@ const verifyTask = async (questId,task) => {
       body: JSON.stringify(obj),
     });
    const data = await response.json()
+   
    if(data.error){
     alert(data.data);
   };
+  return data;
 }
   export default verifyTask;

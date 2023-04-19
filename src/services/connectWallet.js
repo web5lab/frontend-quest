@@ -6,11 +6,11 @@ import { wallet, xp } from "../redux/user/user.actions";
 export const IntilizeData = async() => {
     let dispatch = useDispatch();
    const walletAd = localStorage.getItem('address');
-   const jwtToken = localStorage.getItem('jwtToken');
+//    const jwtToken = localStorage.getItem('jwtToken');
    const xpData = localStorage.getItem('Xp')
-   if (!walletAd || !jwtToken ) {
-    return null;
-   }
+//    if (!walletAd || !jwtToken ) {
+//     return null;
+//    }
    dispatch(wallet(walletAd));
    dispatch(xp(xpData));
 }

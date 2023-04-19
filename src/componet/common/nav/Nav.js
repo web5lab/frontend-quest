@@ -6,6 +6,7 @@ import Web3 from 'web3';
 import { useDispatch, useSelector } from "react-redux";
 import { wallet } from "../../../redux/user/user.actions";
 import twitteAuth from "../../../services/twitterAuth";
+import { IntilizeData } from "../../../services/connectWallet";
  
 function Nav() {
  
@@ -23,12 +24,11 @@ function Nav() {
   const [address, setAddress] = useState('');
   const [message, setMessage] = useState('signing to quest');
   const [signature, setSignature] = useState('');
-  const [walletConnectBtn, setwalletConnectBtn] = useState(walletAddress.length<17?walletAddress: walletAddress.slice(0,5)+'...'+walletAddress.slice(-5));
-  const [xp, setxp] = useState(0)
+  const [walletConnectBtn, setwalletConnectBtn] = useState(!localStorage.getItem('address')?"Connect wallet": localStorage.getItem('address').slice(0,5)+'...'+localStorage.getItem('address').slice(-5));
+  const [xp, setxp] = useState(!localStorage.getItem('Xp')?0:localStorage.getItem('Xp'))
 
 
   let dispatch = useDispatch();
-
   console.log(walletAddress,"mainu ");
   const handleClick = () => {
     setClicked(!clicked);
@@ -118,8 +118,8 @@ function Nav() {
         <li>
           <NavLink className="navbarBtn">
             {/* wallet connect used here */}
-            {pointXp > 0 ? (
-        <span id="xp">{pointXp}Xp</span>
+            {xp > 0 ? (
+        <span id="xp">{xp}Xp</span>
       ) : (
         <span></span>
       )}

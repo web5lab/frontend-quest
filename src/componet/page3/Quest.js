@@ -17,6 +17,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { GET_ONE_QUEST } from "../../apis/api";
 import Header from "../common/Header";
+import { IntilizeData } from "../../services/connectWallet";
 // import { useSelector } from "react-redux";
 
 function Quest() {
@@ -40,7 +41,7 @@ function Quest() {
         },
         url: GET_ONE_QUEST(id),
       });
-
+      
       setData([res.data.data]);
       setTaskData(res.data.task);
       setLoading(false);

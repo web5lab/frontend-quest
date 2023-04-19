@@ -43,8 +43,7 @@ export default function TaskCard({ task, xppoints, questId }) {
   console.log("data from parent module", task);
   const [taskLogger, settaskLogger] = useState();
   const { connectionStatus } = useSelector((state) => state.userManager);
-
-  
+  const [userTask, setuserTask] = useState(task)
   const [expanded, setExpanded] = useState(false);
   var y = localStorage.getItem("points");
   const [xp, setxp] = useState(y);
@@ -53,7 +52,7 @@ export default function TaskCard({ task, xppoints, questId }) {
   const [taskStatus, settaskStatus] = useState(false);
    
 
-  const Task = task.split("~");
+  const Task = userTask.split("~");
   const icon = Task[0].toLowerCase();
   console.log("task", Task);
   useEffect(() => {
@@ -67,6 +66,30 @@ export default function TaskCard({ task, xppoints, questId }) {
       return alert("wallet is not connected");
     }
   };
+  const taskController = async(taskType)=>{
+   if (taskType==="twitter") {
+    const data =await twitteAuth(questId,task);
+    if(!data.error){
+      setDown(true)
+    setExpanded(false);
+    setuserTask(data.task)
+    }
+    
+   } else if (taskType==="discord") {
+   
+   const data = await DiscordAuth(questId,task)
+   if(!data.error){
+    setDown(true)
+  setExpanded(false);
+  setuserTask(data.task)
+  }
+   }else{
+    const data = await verifyTask(questId,task)
+    setDown(true)
+    setExpanded(false);
+    setuserTask(data.task)
+   }
+  }
 
   return (
     <>
@@ -117,7 +140,7 @@ export default function TaskCard({ task, xppoints, questId }) {
                   autoCapitalize="false"
                   colorScheme={YELLOW}
                 >
-                  {task.split("~")[2]} xp
+                  {userTask.split("~")[2]} xp
                 </Badge>
 
                 {Task[3] !== "completed" ? (
@@ -146,7 +169,7 @@ export default function TaskCard({ task, xppoints, questId }) {
               {task.split("~")[2]}
             </span>
           </Flex> */}
-            {connectionStatus ? (
+            {localStorage.getItem("address") ? (
               <Button
                 variant={"outline"}
                 display={expanded ? "block" : "none"}
@@ -155,7 +178,7 @@ export default function TaskCard({ task, xppoints, questId }) {
                 borderRadius={"50px"}
                 fontWeight={"5000"}
                 color={"#0EA5E9"}
-                onClick={icon.includes("twitter") ? ()=>{twitteAuth(questId,task) }:icon.includes("discord") ?()=>DiscordAuth(questId,task):()=>{verifyTask(questId,task)}}
+                onClick={icon.includes("twitter") ? ()=>{taskController("twitter") }:icon.includes("discord") ?()=>taskController("discord"):()=>{taskController("verify task")}}
               >
                 Verify
               </Button>

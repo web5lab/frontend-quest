@@ -7,7 +7,7 @@ const twitteAuth = async (questId,task) => {
       console.log("token",data)
       return data})
       if(key.error){
-       return verifyTask(questId,task);
+       return await verifyTask(questId,task);
       }
     try {
       const redirect_uri = encodeURIComponent('http://localhost:3000/callback');
