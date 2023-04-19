@@ -1,3 +1,6 @@
+
+
+
 const verifyTask = async (questId,task) => {
     const obj = {
       questId: questId,
@@ -13,8 +16,7 @@ const verifyTask = async (questId,task) => {
     });
    const data = await response.json()
    if(data.error){
-    alert(data.data)
-   }
+    alert(data.data);
   };
-
-  export default verifyTask
+}
+  export default verifyTask;

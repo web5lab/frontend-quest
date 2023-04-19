@@ -48,7 +48,7 @@ const dummyArr = [
 const LeaderBoard = () => {
   const [dataleaderboard, setdataleaderboard] = useState(dummyArr)
   const getLeaderBoard = async() => {
-    const laeaderBoardData =  await fetch('http://31.220.48.246:4000/user/leaderboard').then(response => response.json())
+    const laeaderBoardData =  await fetch('http://localhost:4000/user/leaderboard').then(response => response.json())
     .then(data => {
      
       return data})
