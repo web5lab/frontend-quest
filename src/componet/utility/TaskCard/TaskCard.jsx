@@ -51,7 +51,7 @@ export default function TaskCard({ task, xppoints, questId }) {
 
   const [down, setDown] = useState(false);
   const [taskStatus, settaskStatus] = useState(false);
-  
+   
 
   const Task = task.split("~");
   const icon = Task[0].toLowerCase();
