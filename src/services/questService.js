@@ -6,7 +6,7 @@ const verifyTask = async (questId,task) => {
       questId: questId,
       task: task,
     };
-    const response = await fetch("https://cryptotool.in/quest/completeTask", {
+    const response = await fetch("http://31.220.48.246:4000/quest/completeTask", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

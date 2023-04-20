@@ -3,7 +3,7 @@ import verifyTask from "./questService";
 const DiscordAuth = async (questId,task) => {
  
     console.log("working ");
-    const key = await fetch(`https://cryptotool.in/user/discord/${localStorage.getItem("jwtToken")}`).then(response => response.json())
+    const key = await fetch(`http://31.220.48.246:4000/user/discord/${localStorage.getItem("jwtToken")}`).then(response => response.json())
     .then(data => {
       console.log("token",data)
       return data})
