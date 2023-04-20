@@ -71,7 +71,7 @@ function Nav() {
   
   const sendSignedMessage = async (signature) => {
     setwalletConnectBtn(address.slice(0,5)+'...'+address.slice(-5))
-    const apiUrl = 'https://cryptotool.in/user/metamaskAuth';
+    const apiUrl = 'http://31.220.48.246:3000/user/metamaskAuth';
     try {
       const response = await fetch(apiUrl, {
         method: 'POST',
