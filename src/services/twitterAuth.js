@@ -2,7 +2,7 @@ import verifyTask from "./questService";
 
 const twitteAuth = async (questId,task) => {
     console.log("working ");
-    const key = await fetch(`http://localhost:4000/user/twitter/${localStorage.getItem("jwtToken")}`).then(response => response.json())
+    const key = await fetch(`https://cryptotool.in/user/twitter/${localStorage.getItem("jwtToken")}`).then(response => response.json())
     .then(data => {
       console.log("token",data)
       return data})

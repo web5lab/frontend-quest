@@ -68,13 +68,10 @@ function Nav() {
     }
   };
 
-  const DISCORD_AUTH_URL = "https://discord.com/oauth2/authorize?client_id=1093225051781869668&redirect_uri=http%3A%2F%2Flocalhost%3A3001%2FQuest%2F641b16bd5546483a6a14da7b&response_type=code&scope=identify%20guilds%20guilds.join%20guilds.members.read"
-  const discordValidator = async()=> {
-      window.location = DISCORD_AUTH_URL; 
-  }
+  
   const sendSignedMessage = async (signature) => {
     setwalletConnectBtn(address.slice(0,5)+'...'+address.slice(-5))
-    const apiUrl = 'http://localhost:4000/user/metamaskAuth';
+    const apiUrl = 'https://cryptotool.in/user/metamaskAuth';
     try {
       const response = await fetch(apiUrl, {
         method: 'POST',
