@@ -56,7 +56,7 @@
   }
 
   .down{
-    -webkit-animation: slideDown 1s;
+    -webkit-animation: slideDown 0.5s;
   }
   
   

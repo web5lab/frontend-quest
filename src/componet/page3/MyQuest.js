@@ -6,7 +6,7 @@ import Navbar from "./NavbarQ";
 import QuestCard from "../utility/QuestCard/QuestCard";
 import { useDispatch, useSelector } from "react-redux";
 import { allQuest, getQuest } from "../../redux/quest/quest.actions";
-import { Grid } from "@chakra-ui/react";
+import { Grid, Spinner } from "@chakra-ui/react";
 import {
   AUTO,
   FILL_80PARENT,
@@ -30,19 +30,12 @@ function MyQuest() {
   let { data } = useSelector((state) => state.authManager);
   // let {token,name,email} = data
 
-  const [questDat, setQuestData] = useState([]);
   let dispatch = useDispatch();
   useEffect(() => {
     dispatch(allQuest());
   }, []);
 
-  useEffect(() => {
-    setQuestData(qdata);
-  }, [qdata]);
 
-  useEffect(()=>{
-    IntilizeData()
-  },[IntilizeData()])
   return (
     <div style={{}}>
       <Header />
@@ -54,7 +47,7 @@ function MyQuest() {
       </div>
       <div className="diveff">
         <h1 style={{marginLeft:"0.7rem"}}>Live Quests</h1>
-        <Grid
+      { qloading?<Spinner m='auto' size={'xl'}/>: <Grid
           justifyContent={"center"}
           alignItems={"center"}
           gap={"32px"}
@@ -69,10 +62,10 @@ function MyQuest() {
           mb={"100px"}
           gridTemplateColumns={{ base: R1, sm: R1, md: R2, lg: R3 }}
         >
-          {questDat?.map((el) => (
+          {qdata?.map((el) => (
             <QuestCard {...el} />
           ))}
-        </Grid>
+        </Grid>}
       </div>
     </div>
   );

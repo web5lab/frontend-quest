@@ -7,7 +7,7 @@ import {
   HStack,
   Text,
   VStack,
-  Stack,
+  Stack,useToast,
   Checkbox,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
@@ -31,29 +31,31 @@ import { Link } from "react-router-dom";
 import { inherits } from "@babel/types";
 import { BsFillCheckCircleFill } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
-import { IntilizeData } from "../../../services/connectWallet";
+import { IntilizeData, handleWalletConnect } from "../../../services/connectWallet";
 import axios from "axios";
 import twitteAuth from "../../../services/twitterAuth";
 import verifyTask from "../../../services/questService";
 import DiscordAuth from "../../../services/discordAuth";
+import Web3 from 'web3';
+import { wallet,xp as pointXp, connectWallet } from "../../../redux/user/user.actions";
+import { CONSTS } from "../../../Consts";
 
 export default function TaskCard({ task, xppoints, questId }) {
   console.log(xppoints);
   console.log("quest id is", questId);
   console.log("data from parent module", task);
-  const [taskLogger, settaskLogger] = useState();
-  const { connectionStatus } = useSelector((state) => state.userManager);
-  const [userTask, setuserTask] = useState(task)
+  const { buttonState } = useSelector((state) => state.userManager);
+  const [userTask, setuserTask] = useState(task);
   const [expanded, setExpanded] = useState(false);
   var y = localStorage.getItem("points");
   const [xp, setxp] = useState(y);
-
   const [down, setDown] = useState(false);
   const [taskStatus, settaskStatus] = useState(false);
-   
-
-  const Task = userTask.split("~");
+  const dispatch=useDispatch();
+  const Task = userTask?.split("~");
   const icon = Task[0].toLowerCase();
+  const toast = useToast();
+
   console.log("task", Task);
   useEffect(() => {
     y = localStorage.getItem("points");
@@ -61,35 +63,42 @@ export default function TaskCard({ task, xppoints, questId }) {
     setxp(y);
     console.log("taskcard value points local", xp, y);
   }, []);
-  const connectWalletAlert = async () => {
-    if (!connectionStatus) {
-      return alert("wallet is not connected");
+
+  const connectWalletonClick=async()=>{
+    dispatch(connectWallet());
+
+  }
+
+  const taskController = async (taskType) => {
+    if (taskType === "twitter") {
+      const data = await twitteAuth(questId, task,toast);
+      console.log(data);
+      if (!data.error) {
+        setDown(true);
+        setExpanded(false);
+        setuserTask(data?.task);
+        dispatch(connectWallet());
+      }
+      
+    } else if (taskType === "discord") {
+      const data = await DiscordAuth(questId, task,toast);
+      console.log(data);
+      if (!data.error) {
+        setDown(true);
+        setExpanded(false);
+        setuserTask(data?.task);
+        dispatch(connectWallet());
+      }
+    } else {
+      const data = await verifyTask(questId, task,toast);
+      console.log(data);
+      setDown(true);
+      setExpanded(false);
+      setuserTask(data?.task);
+      dispatch(connectWallet());
     }
   };
-  const taskController = async(taskType)=>{
-   if (taskType==="twitter") {
-    const data =await twitteAuth(questId,task);
-    if(!data.error){
-      setDown(true)
-    setExpanded(false);
-    setuserTask(data.task)
-    }
-    
-   } else if (taskType==="discord") {
-   
-   const data = await DiscordAuth(questId,task)
-   if(!data.error){
-    setDown(true)
-  setExpanded(false);
-  setuserTask(data.task)
-  }
-   }else{
-    const data = await verifyTask(questId,task)
-    setDown(true)
-    setExpanded(false);
-    setuserTask(data.task)
-   }
-  }
+  
 
   return (
     <>
@@ -178,7 +187,17 @@ export default function TaskCard({ task, xppoints, questId }) {
                 borderRadius={"50px"}
                 fontWeight={"5000"}
                 color={"#0EA5E9"}
-                onClick={icon.includes("twitter") ? ()=>{taskController("twitter") }:icon.includes("discord") ?()=>taskController("discord"):()=>{taskController("verify task")}}
+                onClick={
+                  icon.includes("twitter")
+                    ? () => {
+                        taskController("twitter");
+                      }
+                    : icon.includes("discord")
+                    ? () => taskController("discord")
+                    : () => {
+                        taskController("verify task");
+                      }
+                }
               >
                 Verify
               </Button>
@@ -191,9 +210,9 @@ export default function TaskCard({ task, xppoints, questId }) {
                 borderRadius={"50px"}
                 fontWeight={"5000"}
                 color={"#0EA5E9"}
-                onClick={connectWalletAlert}
+                onClick={connectWalletonClick}
               >
-                connect wallet
+                {buttonState}
               </Button>
             )}
           </VStack>

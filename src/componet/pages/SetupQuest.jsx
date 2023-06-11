@@ -98,11 +98,11 @@ export default function SetupQuest() {
   const [questData, setQuestData] = useState([]);
   useEffect(() => {
     dispatch(getQuest(token));
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     setQuestData(qdata);
-  }, [qdata]);
+  }, [qdata,token]);
 
   console.log(questData);
 
@@ -307,7 +307,7 @@ export default function SetupQuest() {
         m={AUTO}
         mt={"50px"}
       >
-        {questData.map((el) => (
+        {qdata.map((el) => (
           <QuestItem {...el} data={data} />
         ))}
       </VStack>

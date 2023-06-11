@@ -1,12 +1,15 @@
+import { CONSTS } from "../Consts";
 
 
 
-const verifyTask = async (questId,task) => {
+const verifyTask = async (questId,task,toast) => {
     const obj = {
       questId: questId,
       task: task,
     };
-    const response = await fetch("http://31.220.48.246:4000/quest/completeTask", {
+    console.log({...obj})
+
+    const response = await fetch(`${CONSTS.SERVER_URL}/quest/completeTask`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -15,10 +18,28 @@ const verifyTask = async (questId,task) => {
       body: JSON.stringify(obj),
     });
    const data = await response.json()
-   
+   console.log(data);
    if(data.error){
-    alert(data.data);
+    toast({
+      title: data.data,
+      position: "top",
+      description: "",
+      status: "warning",
+      duration: 3000,
+      isClosable: true,
+    });
   };
+  if(typeof(data)=="string"){
+    toast({
+      title: data,
+      position: "top",
+      description: "",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
+    return {data,status:0,error:true}
+  }
   return data;
 }
   export default verifyTask;
