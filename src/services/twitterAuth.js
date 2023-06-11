@@ -1,7 +1,7 @@
 import { CONSTS } from "../Consts";
 import verifyTask from "./questService";
 
-const twitteAuth = async (questId,task) => {
+const twitteAuth = async (questId,task,toast) => {
     console.log("working ");
     const key = await fetch(`${CONSTS.SERVER_URL}/user/twitter/${localStorage.getItem("jwtToken")}`).then(response => response.json())
     .then(data => {
@@ -11,7 +11,7 @@ const twitteAuth = async (questId,task) => {
       })
       if(key.error){
         console.log({task,questId})
-       return await verifyTask(questId,task);
+       return await verifyTask(questId,task,toast);
       }
     try {
       const redirect_uri = encodeURIComponent(`${CONSTS.HOST_URL}/callback`);

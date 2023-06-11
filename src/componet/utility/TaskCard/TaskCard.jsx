@@ -7,7 +7,7 @@ import {
   HStack,
   Text,
   VStack,
-  Stack,
+  Stack,useToast,
   Checkbox,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
@@ -31,37 +31,31 @@ import { Link } from "react-router-dom";
 import { inherits } from "@babel/types";
 import { BsFillCheckCircleFill } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
-import { IntilizeData } from "../../../services/connectWallet";
+import { IntilizeData, handleWalletConnect } from "../../../services/connectWallet";
 import axios from "axios";
 import twitteAuth from "../../../services/twitterAuth";
 import verifyTask from "../../../services/questService";
 import DiscordAuth from "../../../services/discordAuth";
 import Web3 from 'web3';
-import { wallet } from "../../../redux/user/user.actions";
+import { wallet,xp as pointXp, connectWallet } from "../../../redux/user/user.actions";
 import { CONSTS } from "../../../Consts";
 
 export default function TaskCard({ task, xppoints, questId }) {
   console.log(xppoints);
   console.log("quest id is", questId);
   console.log("data from parent module", task);
-  const [taskLogger, settaskLogger] = useState();
-  const { connectionStatus } = useSelector((state) => state.userManager);
+  const { buttonState } = useSelector((state) => state.userManager);
   const [userTask, setuserTask] = useState(task);
   const [expanded, setExpanded] = useState(false);
   var y = localStorage.getItem("points");
   const [xp, setxp] = useState(y);
-  const [web3, setWeb3] = useState(null);
-  const [address, setAddress] = useState('');
-  const [message, setMessage] = useState('signing to quest');
-  const [signature, setSignature] = useState('');
-  const [walletConnectBtn, setwalletConnectBtn] = useState(!localStorage.getItem('address') ? "Connect wallet" : localStorage.getItem('address').slice(0, 5) + '...' + localStorage.getItem('address').slice(-5));
-  const [Xp, setXp] = useState(!localStorage.getItem('Xp') ? 0 : localStorage.getItem('Xp'))
   const [down, setDown] = useState(false);
   const [taskStatus, settaskStatus] = useState(false);
   const dispatch=useDispatch();
   const Task = userTask?.split("~");
   const icon = Task[0].toLowerCase();
- 
+  const toast = useToast();
+
   console.log("task", Task);
   useEffect(() => {
     y = localStorage.getItem("points");
@@ -70,103 +64,38 @@ export default function TaskCard({ task, xppoints, questId }) {
     console.log("taskcard value points local", xp, y);
   }, []);
 
-  const handleWalletConnect = async () => {
-    // if (connectionStatus) {
-    //   return console.log("user already connected");
-    // }
-    if (window.ethereum) {
-      try {
-        await window.ethereum.enable();
-        const web3 = new Web3(window.ethereum);
-        const accounts = await web3.eth.getAccounts();
-        setWeb3(web3);
-        setAddress(accounts[0]);
-        await handleSignMessage(accounts[0]);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
+  const connectWalletonClick=async()=>{
+    dispatch(connectWallet());
 
-  const handleSignMessage = async (item) => {
-    const messageToSign = message.trim();
-    if (web3 && address && messageToSign) {
-      try {
-        const signature = await web3.eth.personal.sign(messageToSign, address, '');
-        setSignature(signature);
-        sendSignedMessage(signature);
-        console.log(signature);
-        dispatch(wallet(item));
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
+  }
 
-
-  const sendSignedMessage = async (signature) => {
-    setwalletConnectBtn(address.slice(0, 5) + '...' + address.slice(-5))
-    const apiUrl = `${CONSTS.SERVER_URL}/user/metamaskAuth`;
-    try {
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ message, signature, address }),
-      });
-      const responseData = await response.json();
-      localStorage.clear('jwtToken');
-      localStorage.clear('Xp');
-      localStorage.clear('address');
-      console.log(response);
-      setXp(responseData.points);
-      console.log("jwt output", responseData.token);
-      localStorage.setItem('jwtToken', responseData.token);
-      localStorage.setItem('Xp', responseData.points);
-      localStorage.setItem('address', address);
-      console.log(responseData);
-      const t = localStorage.getItem('jwtToken');
-      console.log(responseData.token);
-    } catch (error) {
-      console.error(error, "error from auth");
-    }
-    IntilizeData()
-  };
-
-
-  const connectWalletAlert = async () => {
-    if (!connectionStatus) {
-      return alert("wallet is not connected");
-    }
-  };
   const taskController = async (taskType) => {
     if (taskType === "twitter") {
-      const data = await twitteAuth(questId, task);
+      const data = await twitteAuth(questId, task,toast);
       console.log(data);
       if (!data.error) {
         setDown(true);
         setExpanded(false);
         setuserTask(data?.task);
-        handleWalletConnect()
+        dispatch(connectWallet());
       }
       
     } else if (taskType === "discord") {
-      const data = await DiscordAuth(questId, task);
+      const data = await DiscordAuth(questId, task,toast);
       console.log(data);
       if (!data.error) {
         setDown(true);
         setExpanded(false);
         setuserTask(data?.task);
-        handleWalletConnect()
+        dispatch(connectWallet());
       }
     } else {
-      const data = await verifyTask(questId, task);
+      const data = await verifyTask(questId, task,toast);
       console.log(data);
       setDown(true);
       setExpanded(false);
       setuserTask(data?.task);
-      handleWalletConnect()
+      dispatch(connectWallet());
     }
   };
   
@@ -281,9 +210,9 @@ export default function TaskCard({ task, xppoints, questId }) {
                 borderRadius={"50px"}
                 fontWeight={"5000"}
                 color={"#0EA5E9"}
-                onClick={connectWalletAlert}
+                onClick={connectWalletonClick}
               >
-                connect wallet
+                {buttonState}
               </Button>
             )}
           </VStack>

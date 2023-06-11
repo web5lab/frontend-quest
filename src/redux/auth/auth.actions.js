@@ -2,7 +2,7 @@ import { useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { LOGIN_API } from "../../apis/api";
 import { LOGIN_ERROR, LOGIN_LOADING, LOGIN_SUCCESS,LOGOUT } from "./auth.types";
-import { wallet } from "../user/user.actions";
+import { setButtonState, wallet } from "../user/user.actions";
 
 export const loginUser = (obj, toast) => async (dispatch) => {
   dispatch({ type: LOGIN_LOADING });
@@ -63,5 +63,7 @@ export const loginUser = (obj, toast) => async (dispatch) => {
 };
 
 export const logoutApi=async(payload)=>(dispatch)=>{
+  dispatch(setButtonState('Connect wallet'))
   localStorage.removeItem('address')
 }
+

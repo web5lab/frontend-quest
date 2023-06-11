@@ -197,7 +197,7 @@ margin: 16px;
 
 
 .right{
-    -webkit-animation: slideRight 1s;
+    -webkit-animation: slideRight 0.5s;
   }
 
   

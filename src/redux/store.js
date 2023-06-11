@@ -1,4 +1,4 @@
-import { applyMiddleware, combineReducers, legacy_createStore } from "redux";
+import { applyMiddleware, combineReducers, compose, legacy_createStore } from "redux";
 import thunk from "redux-thunk";
 import { authReducer } from "./auth/auth.reducer";
 import { questReducer } from "./quest/quest.reducer";
@@ -10,4 +10,5 @@ const rootReducer = combineReducers({
     userManager:userReducer,
 })
 
-export const store = legacy_createStore(rootReducer,applyMiddleware(thunk))
+
+export const store = legacy_createStore(rootReducer,compose(applyMiddleware(thunk)))
