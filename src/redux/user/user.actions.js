@@ -8,10 +8,24 @@ export const wallet=(obj)=>(dispatch)=>{
 }
 
 export const connectWallet=()=>async(dispatch)=>{
-    dispatch(setButtonState('Connecting...'))
-   let data= await handleWalletConnect()
-   dispatch({ type: SET_WALLET, payload: data.address });
-   dispatch({ type: SET_Xp, payload: data.xp });
+    try{
+
+        dispatch(setButtonState('Connecting...'))
+        let data= await handleWalletConnect()
+        if(data.error){
+            alert(data.error.message)
+            setTimeout(()=>{
+
+                dispatch(setButtonState('Connect wallet'))
+            },500)
+        }else{
+
+            dispatch({ type: SET_WALLET, payload: data.address });
+            dispatch({ type: SET_Xp, payload: data.xp });
+        }
+    }catch(e){
+
+    }
 
 } 
 

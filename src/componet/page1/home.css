@@ -18,10 +18,18 @@
   display: flex;
   flex-direction: row;
   justify-content: space-around; 
-  align-content: space-between;
+  align-items: center;
   z-index: 1;
-}
+  background-image: url('../images/Newphotos/Home.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-clip: border-box;
+  height: 100vh;
+  width: 100%;
+  margin: auto;
 
+}
 .rightbtnsection{
   display: flex;
   flex-direction: column;
@@ -29,10 +37,20 @@
   align-items: flex-start;
 
 }
+.maintext {
+  text-align: center;
+  margin: 10px;
+  font-size: 60px;
+  font-weight: bold;
+  color: white;
+}
+
+
 .imgEdiv1 {
   position: absolute;
   bottom: 0px;
   right: 0px;
+  width: 100%;
   transform: rotate(180deg);
 }
 
@@ -50,13 +68,7 @@
   color: white;
 }
 
-.maintext {
-  text-align: center;
-  margin: 10px;
-  font-size: 60px;
-  font-weight: bold;
-  color: white;
-}
+
 
 .but2 {
   font-size: 20px;
@@ -100,8 +112,54 @@
   height: 600vh;
   background-color: rgb(6, 2, 54);
 }
+@media (max-width: 767px) {
+  .main{
+    width:min-content;
+  }
+  .homediv{
+    width: 100%;
 
-@media (max-width: 998px) {
+  }
+  .Hometextdiv {
+    flex-direction: column;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+  }
+  .leftsec{
+    align-items: center;
+    justify-content: center;
+    left: 0px;
+    margin-top: 150px;
+    width: 100%;
+
+  }
+  .rightbtnsection{
+    align-items: center;
+    margin: auto;
+    margin-top: 20px;
+  }
+  .maintext{
+    font-size:35px;
+    line-height: 49px;
+    margin: 0px;
+    padding: 0px;
+    
+  }
+  .maintext2{
+    font-size: 18px;
+  }
+  .butdiv{
+    margin-top: 25px;
+    /* border: 1px solid white; */
+    
+  }
+}
+
+/* @media (max-width: 998px) {
   .butdiv{
     width: 50%; 
       }
@@ -279,6 +337,6 @@ width: 50%;
     width: 100% !important;
    }
   
-}
+} */
 
 /* page2 */

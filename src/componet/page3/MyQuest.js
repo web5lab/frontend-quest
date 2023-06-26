@@ -22,7 +22,7 @@ import Header from "../common/Header";
 import { IntilizeData } from "../../services/connectWallet";
 
 function MyQuest() {
-  let {
+  const {
     loading: qloading,
     error: qerror,
     data: qdata,
@@ -32,12 +32,15 @@ function MyQuest() {
 
   let dispatch = useDispatch();
   useEffect(() => {
-    dispatch(allQuest());
-  }, []);
+    if(qdata.length===0){
+
+      dispatch(allQuest());
+    }
+  }, [qdata]);
 
 
   return (
-    <div style={{}}>
+    <div >
       <Header />
 
       <div className="apidiv">

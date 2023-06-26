@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import "./nav.css";
-import { Button, MenuButton, Menu, MenuList, MenuItem,  } from "@chakra-ui/react";
+import { Button, MenuButton, Menu, MenuList, MenuItem, } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { connectWallet, setButtonState, xp as XpUpdate } from "../../../redux/user/user.actions";
 import WalletIcon from "../../../assets/WalletIcon";
@@ -18,9 +18,9 @@ function Nav() {
     walletAddress,
     pointXp,
     buttonState,
-     } = useSelector(
-      (state) => state.userManager
-    );
+  } = useSelector(
+    (state) => state.userManager
+  );
 
   const [clicked, setClicked] = useState(false);
 
@@ -65,25 +65,36 @@ function Nav() {
               <span></span>
             )}
 
-            <Menu >
-              <MenuButton
-                aria-label='Options'
-                as={Button}
-                rightIcon={<WalletIcon />}
-                variant='outline'
-                id='connect_wallet'
-                borderRadius='50px'
-                top='3px' right='0px'
-                _hover={{ backgroundColor: 'rgb(5, 5, 175)' }}
-                onClick={() => (buttonState !== ('Connect wallet' || 'Connecting...') ? () => { } : connectWalletonClick())}
-              >{buttonState}</MenuButton>
-              {(buttonState !== 'Connect wallet' &&buttonState !==  'Connecting...') && <MenuList backgroundColor='blue'>
-                <MenuItem icon={<FiLogOut />} color='red' border='none' onClick={() => onLogout()} >
-                  Logout
-                </MenuItem>
+            {(buttonState === 'Connect wallet' || buttonState === 'Connecting...') ? <Button
+              aria-label='Options'
+              rightIcon={<WalletIcon />}
+              variant='outline'
+              id='connect_wallet'
+              borderRadius='50px'
+              top='3px' right='0px'
+              _hover={{ backgroundColor: 'rgb(5, 5, 175)' }}
+              onClick={() => (buttonState !== ('Connect wallet' || 'Connecting...') ? () => { } : connectWalletonClick())}
+            >{buttonState}</Button>
+              : <Menu >
+                <MenuButton
+                  aria-label='Options'
+                  as={Button}
+                  rightIcon={<WalletIcon />}
+                  variant='outline'
+                  id='connect_wallet'
+                  borderRadius='50px'
+                  top='3px' right='0px'
+                  _hover={{ backgroundColor: 'rgb(5, 5, 175)' }}
+                  // onClick={() => (buttonState !== ('Connect wallet' || 'Connecting...') ? () => { } : connectWalletonClick())}
+                >{buttonState}</MenuButton>
 
-              </MenuList>}
-            </Menu>
+                <MenuList backgroundColor='blue'>
+                  <MenuItem icon={<FiLogOut />} color='red' border='none' onClick={() => onLogout()} >
+                    Logout
+                  </MenuItem>
+
+                </MenuList>
+              </Menu>}
             {/* wallet connect function from here */}
           </NavLink>
         </li>

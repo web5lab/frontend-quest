@@ -2,17 +2,19 @@
 
   text-align: center;
   font-family: 'DM Sans';
+  padding: 0px;
+  width: 100%;
 } 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
-
+/* 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
-}
+} */
 
 .App-header {
   background-color: #282c34;
@@ -39,8 +41,8 @@
   }
 }
 
-#meta {
+/* #meta {
   position: absolute;
   top: 0px;
   right: 0px;
-}
+} */

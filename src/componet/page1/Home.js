@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Imageplace from "./Imageplace";
 import Ellp from "../images/Newphotos/Home.png";
 
@@ -8,8 +8,14 @@ import Header from "../common/Header";
 import { Link } from "react-router-dom";
 import Navbar from "../page3/NavbarQ";
 import signupq from "../images/signupq.png"
+import { useDispatch } from "react-redux";
+import { allQuest } from "../../redux/quest/quest.actions";
 function Home() {
 
+  let dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(allQuest());
+  }, []);
 
   if (localStorage.getItem("points") == null) {
     localStorage.setItem("points", "0");
@@ -19,16 +25,16 @@ function Home() {
 
   }
   return (
-    <div>
+    <div className='main'>
       {/* <Header />
        */}
       <Navbar />
 
       <div className="homediv smallhomediv">
 
-        <div className="imgEdiv">
+        {/* <div className="imgEdiv">
           <img src={Ellp} alt="" className="firstimg" />
-        </div>
+        </div> */}
 
         <div className="Hometextdiv">
 
